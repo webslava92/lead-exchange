@@ -1,0 +1,96 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "plugins": [
+    "@typescript-eslint"
+  ],
+  "extends": [
+    "airbnb",
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "settings": {
+    "import/resolver": {
+      "typescript": {}
+    }
+  },
+  "env": {
+    "es6": true,
+    "browser": true,
+    "jest": true,
+    "node": true
+  },
+  "rules": {
+    "react/prop-types": 0,
+    "react/react-in-jsx-scope": 0,
+    "react/display-name": 0,
+    "react/jsx-filename-extension": 0,
+    "react/jsx-fragments": 0,
+    "react/jsx-curly-brace-presence": 0,
+    "react/no-children-prop": 0,
+    "react/require-default-props": 0,
+    "react/button-has-type": 0,
+    "react/jsx-props-no-spreading": 0,
+    "react/jsx-one-expression-per-line": 0,
+    "react/destructuring-assignment": 0,
+    "react/state-in-constructor": 0,
+    "react/no-did-update-set-state": 0,
+    "no-underscore-dangle": 0,
+    "camelcase": 0,
+    "jsx-quotes": ["error", "prefer-single"],
+    "prefer-destructuring": 0,
+    "object-curly-newline": 0,
+    "function-paren-newline": 0,
+    "no-use-before-define": "off",
+    "@typescript-eslint/no-non-null-assertion": 0,
+    "@typescript-eslint/ban-types": 0,
+    "no-restricted-syntax": [
+      "error",
+      {
+        "selector": "LabeledStatement",
+        "message": "Labels are a form of GOTO; using them makes code confusing and hard to maintain and understand."
+      },
+      {
+        "selector": "WithStatement",
+        "message": "`with` is disallowed in strict mode because it makes code impossible to predict and optimize."
+      }
+    ],
+    "@typescript-eslint/no-use-before-define": ["error"],
+    "@typescript-eslint/explicit-member-accessibility": 0,
+    "@typescript-eslint/indent": 0,
+    "@typescript-eslint/member-delimiter-style": 0,
+    "@typescript-eslint/no-explicit-any": 0,
+    "@typescript-eslint/no-var-requires": 0,
+    "@typescript-eslint/explicit-function-return-type": 0,
+    "@typescript-eslint/explicit-module-boundary-types": 0,
+    "quote-props": 0,
+    "import/no-extraneous-dependencies": 0,
+    "comma-dangle": 0,
+    "operator-linebreak": 0,
+    "import/no-dynamic-require": 0,
+    "implicit-arrow-linebreak": 0,
+    "no-multiple-empty-lines": 0,
+    "func-names": 0,
+    "import/extensions": 0,
+    "import/prefer-default-export": 0,
+    "linebreak-style": 0,
+    "@typescript-eslint/no-unused-vars": [
+      2,
+      {
+        "argsIgnorePattern": "^_"
+      }
+    ],
+    "no-console": [
+      2,
+      {
+        "allow": ["info", "warn", "error"]
+      }
+    ],
+    "max-len": [
+      "error",
+      {
+        "code": 130
+      }
+    ]
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "paths": {
+      "@api": [
+        "./src/api"
+      ],
+      "@api-v2": [
+        "./src/api/v2"
+      ],
+      "@queries/*": [
+        "./src/queries/*"
+      ],
+      "@ui": [
+        "./src/ui"
+      ],
+      "@pages": [
+        "./src/pages"
+      ],
+      "@lib": [
+        "./src/lib"
+      ],
+      "@features/*": [
+        "./src/features/*"
+      ],
+      "@common/*": [
+        "./src/common/*"
+      ]
+    }
+  }
+}
