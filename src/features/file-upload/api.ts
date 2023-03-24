@@ -17,7 +17,7 @@ export async function uploadFiles(file: string | Blob, onUploadProgress: any) {
     throw new Error('an error occured when tried to fetch aliases');
   }
 
-  return result.data;
+  return result.data.data;
 }
 
 export async function getData() {

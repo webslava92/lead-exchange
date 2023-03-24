@@ -1,9 +1,16 @@
 /* eslint-disable no-console */
 import { AttachFile } from '@mui/icons-material';
-import { Box, Button, IconButton, LinearProgress, Paper, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  IconButton,
+  LinearProgress,
+  Paper,
+  Typography,
+} from '@mui/material';
 import React, { useState } from 'react';
 import { FileType, UploadFileProps } from './types';
-import { getData, uploadFiles } from './api';
+import { uploadFiles } from './api';
 
 export function UploadFile({ setItems }: UploadFileProps) {
   const [currentFile, setCurrentFile] = useState<any>(undefined);
@@ -28,7 +35,11 @@ export function UploadFile({ setItems }: UploadFileProps) {
         setProgress(Math.round((100 * event.loaded) / event.total));
       }
     )
-      .then(() => getData().then((i) => setItems(i)))
+      .then((i) => {
+        setItems(i);
+        setMessage(undefined);
+        setIsError(false);
+      })
       .catch(() => {
         setProgress(0);
         setMessage('Could not upload the file!');
@@ -39,11 +50,13 @@ export function UploadFile({ setItems }: UploadFileProps) {
 
   const styles = {
     wrapper: {},
+    paper: {
+      padding: 2,
+      margin: 2,
+    },
     inner: {
       display: 'flex',
       justifyContent: 'space-between',
-      padding: 2,
-      margin: 2,
     },
     fileBox: {
       display: 'flex',
@@ -62,55 +75,61 @@ export function UploadFile({ setItems }: UploadFileProps) {
 
   return (
     <Box sx={styles.wrapper}>
-      <Paper sx={styles.inner}>
-        <Box sx={styles.fileBox}>
-          {currentFile && progress !== 0 && (
-            <Box display='flex' alignItems='center'>
-              <Box width='100%' mr={1}>
-                <LinearProgress variant='determinate' value={progress} />
-              </Box>
-              <Box minWidth={35}>
-                <Typography variant='body2' sx={styles.fileName}>
-                  {`${progress}%`}
-                </Typography>
-              </Box>
+      <Paper sx={styles.paper}>
+        <Box sx={styles.inner}>
+          <Box sx={styles.fileBox}>
+            <label htmlFor='btn-upload'>
+              <input
+                id='btn-upload'
+                name='btn-upload'
+                style={{ display: 'none' }}
+                type='file'
+                accept='.csv'
+                onChange={selectFile}
+              />
+              <IconButton component='span'>
+                <AttachFile />
+              </IconButton>
+            </label>
+            <Box component='div'>
+              {currentFile ? currentFile.name : null}
             </Box>
-          )}
-          <label htmlFor='btn-upload'>
-            <input
-              id='btn-upload'
-              name='btn-upload'
-              style={{ display: 'none' }}
-              type='file'
-              accept='.csv'
-              onChange={selectFile}
-            />
-            <IconButton component='span'>
-              <AttachFile />
-            </IconButton>
-          </label>
-          <Box component='div'>
-            {currentFile ? currentFile.name : null}
           </Box>
+
+          <Button
+            color='primary'
+            variant='contained'
+            component='span'
+            disabled={!currentFile}
+            onClick={handleUpload}
+          >
+            Upload
+          </Button>
         </Box>
-
-        <Button
-          color='primary'
-          variant='contained'
-          component='span'
-          disabled={!currentFile}
-          onClick={handleUpload}
+        {currentFile && progress !== 0 && progress !== 100 && (
+          <Box display='flex' alignItems='center'>
+            <Box minWidth={35}>
+              <Typography variant='body2' sx={styles.fileName}>
+                Loading file ...
+              </Typography>
+            </Box>
+            <Box width='100%' mr={1}>
+              <LinearProgress variant='determinate' value={progress} />
+            </Box>
+            <Box minWidth={35}>
+              <Typography variant='body2' sx={styles.fileName}>
+                {`${progress}%`}
+              </Typography>
+            </Box>
+          </Box>
+        )}
+        <Typography
+          variant='subtitle2'
+          sx={isError ? styles.errorMessage : message}
         >
-          Upload
-        </Button>
+          {message}
+        </Typography>
       </Paper>
-
-      <Typography
-        variant='subtitle2'
-        sx={isError ? styles.errorMessage : message}
-      >
-        {message}
-      </Typography>
     </Box>
   );
 }
