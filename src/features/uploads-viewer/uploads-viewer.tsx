@@ -13,10 +13,8 @@ import {
 
 type Row = {
   id: number;
-  first_name: string;
-  last_name: string;
-  phone: string;
-  email: string;
+  created_at: string;
+  number_of_entries: number;
 };
 
 type Props = {
@@ -32,17 +30,14 @@ type Column = {
 };
 
 const columns: readonly Column[] = [
-  { id: 'id', label: 'Id', align: 'center' },
-  { id: 'first_name', label: 'First name', align: 'center' },
-  { id: 'last_name', label: 'Last name' },
-  { id: 'phone', label: 'Phone' },
-  { id: 'email', label: 'Email' },
+  { id: 'id', label: 'Id' },
+  { id: 'create_at', label: 'Create date' },
+  { id: 'numbers_of_entries', label: 'Number of entries' },
 ];
 
-export function FilesViewer({
+export function UploadsViewer({
   items,
-}: // setDialogOpen,
-Props) {
+}: Props) {
   const styles = {
     container: {
       maxHeight: 'calc(100vh - 400px)',
@@ -66,7 +61,7 @@ Props) {
   return (
     <>
       <Typography variant='h5' sx={styles.title}>
-        Detailed information about information uploaded from csv files
+        Download list
       </Typography>
       <Paper>
         <TableContainer sx={styles.container}>
@@ -88,10 +83,8 @@ Props) {
                   key={row.id}
                 >
                   <TableCell>{row.id}</TableCell>
-                  <TableCell>{row.first_name}</TableCell>
-                  <TableCell>{row.last_name}</TableCell>
-                  <TableCell>{row.phone}</TableCell>
-                  <TableCell>{row.email}</TableCell>
+                  <TableCell>{row.created_at}</TableCell>
+                  <TableCell>{row.number_of_entries}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

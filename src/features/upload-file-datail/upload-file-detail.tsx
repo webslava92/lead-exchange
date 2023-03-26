@@ -10,9 +10,9 @@ import {
 } from '@mui/material';
 import React, { useState } from 'react';
 import { FileType, UploadFileProps } from './types';
-import { uploadFiles } from './api';
+import { uploadFiles, getUploads } from './api';
 
-export function UploadFile({ setItems }: UploadFileProps) {
+export function UploadFileDetail({ setItems, setUploads }: UploadFileProps) {
   const [currentFile, setCurrentFile] = useState<any>(undefined);
   const [progress, setProgress] = useState<number>(0);
   const [message, setMessage] = useState<any>(undefined);
@@ -46,6 +46,7 @@ export function UploadFile({ setItems }: UploadFileProps) {
         setCurrentFile(undefined);
         setIsError(true);
       });
+    getUploads().then((u) => setUploads(u));
   };
 
   const styles = {

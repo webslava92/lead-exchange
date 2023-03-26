@@ -4,14 +4,17 @@ import { Box, Paper, useTheme } from '@mui/material';
 import { FilesViewer } from '@features/files-viewer/files-viewer';
 import { TopBar } from '@features/top-bar/top-bar';
 import './App.css';
-import { getData } from '@features/file-upload/api';
-import { UploadFile } from '@features/file-upload/upload-file';
+import { getData, getUploads } from '@features/upload-file-datail/api';
+import { UploadFileDetail } from '@features/upload-file-datail';
+import { UploadsViewer } from '@features/uploads-viewer/uploads-viewer';
 
 export function App() {
   const [items, setItems] = useState<any>([]);
+  const [uploads, setUploads] = useState<any>([]);
 
   useEffect(() => {
     getData().then((i) => setItems(i));
+    getUploads().then((i) => setUploads(i));
   }, []);
 
   const theme = useTheme();
@@ -63,10 +66,13 @@ export function App() {
       <Box sx={styles.appInner}>
         <Paper sx={styles.box}>
           <Box>
-            <UploadFile setItems={setItems} />
+            <UploadFileDetail setItems={setItems} setUploads={setUploads} />
           </Box>
           <Box sx={styles.filesWrapper}>
             <FilesViewer items={items} />
+          </Box>
+          <Box sx={styles.filesWrapper}>
+            <UploadsViewer items={uploads} />
           </Box>
         </Paper>
       </Box>

@@ -31,3 +31,15 @@ export async function getData() {
 
   return result.data.data;
 }
+
+export async function getUploads() {
+  const result = await httpClient.get<HttpResponse<ItemsGroup>>(
+    '/uploads',
+    {}
+  );
+  if (result.data.status !== 200) {
+    throw new Error('an error occured when tried to fetch aliases');
+  }
+
+  return result.data.data;
+}

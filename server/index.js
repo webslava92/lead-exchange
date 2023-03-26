@@ -46,9 +46,7 @@ app.get('/', (req, res) => {
 app.get('/users', (req, res) => {
   knex('users')
     .select('*')
-    .then((users) => {
-      res.json({ status: 200, data: users });
-    })
+    .then((users) => res.json({ status: 200, data: users }))
     .catch(() =>
       res.json({
         success: false,
@@ -70,37 +68,73 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 app.post('/upload', upload.single('file'), async (req, res) => {
+  const file = req.file.originalname;
   const result = [];
-  fs.createReadStream(`server/static/${req.file.originalname}`)
+
+  fs.createReadStream(`server/static/${file}`)
     .pipe(csvParser())
-    .on('data', (data) => {
-      result.push(data);
-    })
-    .on('end', () =>
-      console.log('cuccess')
-    );
-  result.map((i) =>
-    knex('users')
-      .insert(i)
-      .catch(() => {
-        res.json({
-          success: false,
-          message: 'An error occurred, please try again later.',
-        });
-      }).then(() => {
-        knex('users')
-          .select('*')
-          .then((users) => {
-            res.json({ status: 200, data: users });
-          })
-          .catch(() =>
+    .on('data', (data) => result.push(data))
+    .on('end', () => {
+      knex('uploads')
+        .insert({ number_of_entries: result.length })
+        .then((uploadId) => {
+          const preparedData = result.map((item) => ({
+            first_name: item.first_name,
+            last_name: item.last_name,
+            phone: item.phone,
+            email: item.email,
+            upload_id: uploadId[0],
+          }));
+
+          console.log('preparedData', preparedData);
+
+          knex('users')
+            .insert(preparedData, ['id'])
+            .then(
+              knex('users')
+                .select('*')
+                .then((users) => res.json({ status: 200, data: users }))
+                .catch((error) => {
+                  if (error) {
+                    res.json({
+                      success: false,
+                      message:
+                        'Сould not get information from the users table',
+                    });
+                  }
+                })
+            )
+            .catch((error) => {
+              if (error) {
+                res.json({
+                  success: false,
+                  message:
+                    'Failed to load information from csv file to users table',
+                });
+              }
+            });
+        })
+        .catch((error) => {
+          if (error) {
             res.json({
               success: false,
-              message: 'An error occurred, please try again later.',
-            })
-          );
+              message: 'Failed to add upload information to the table "upoads"',
+            });
+          }
+        });
+    });
+});
+
+app.get('/uploads', (req, res) => {
+  knex('uploads')
+    .select('*')
+    .then((uploads) => res.json({ status: 200, data: uploads }))
+    .catch(() =>
+      res.json({
+        success: false,
+        message: 'An error occurred, please try again later.',
       })
-  );
+    );
 });
 
 const start = async () => {
