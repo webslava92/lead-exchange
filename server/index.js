@@ -86,8 +86,6 @@ app.post('/upload', upload.single('file'), async (req, res) => {
             upload_id: uploadId[0],
           }));
 
-          console.log('preparedData', preparedData);
-
           knex('users')
             .insert(preparedData, ['id'])
             .then(

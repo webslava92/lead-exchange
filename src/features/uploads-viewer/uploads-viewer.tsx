@@ -43,10 +43,10 @@ export function UploadsViewer({
       maxHeight: 'calc(100vh - 400px)',
       borderRadius: '4px',
       boxSizing: 'border-box',
-      margin: 2,
     },
     title: {
       textAlign: 'center',
+      margin: 2,
     },
     headerCell: {
       fontWeight: 700,

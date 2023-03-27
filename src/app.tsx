@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React, { useEffect, useState } from 'react';
 import { Box, Paper, useTheme } from '@mui/material';
 import { FilesViewer } from '@features/files-viewer/files-viewer';
@@ -20,11 +19,14 @@ export function App() {
   const theme = useTheme();
   const styles = {
     app: {
-      width: '100vw',
-      minHeight: '100vh',
+      position: 'relative',
+      width: '100%',
+      minHeight: '100%',
       backgroundColor: '#eeeeee',
+      padding: 2,
     },
     appInner: {
+      paddingTop: '30px',
       marginTop: '30px',
       display: 'flex',
       alignItems: 'center',
@@ -32,7 +34,7 @@ export function App() {
     box: {
       maxWidth: { xs: '100%', sm: '80vw' },
       width: '100%',
-      margin: { xs: '0 16px', sm: '0 auto' },
+      margin: '0 auto 16px',
       padding: '16px',
       backgroundColor: theme.palette.primary.contrastText,
       borderRadius: '10px',

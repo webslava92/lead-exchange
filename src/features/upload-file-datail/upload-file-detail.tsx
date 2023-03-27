@@ -10,7 +10,7 @@ import {
 } from '@mui/material';
 import React, { useState } from 'react';
 import { FileType, UploadFileProps } from './types';
-import { uploadFiles, getUploads } from './api';
+import { getData, uploadFiles, getUploads } from './api';
 
 export function UploadFileDetail({ setItems, setUploads }: UploadFileProps) {
   const [currentFile, setCurrentFile] = useState<any>(undefined);
@@ -20,7 +20,7 @@ export function UploadFileDetail({ setItems, setUploads }: UploadFileProps) {
 
   const selectFile = (event: FileType) => {
     const file = event.target.files;
-    const fileExtension = file[0].name.split('.').pop();
+    const fileExtension = file[0].name ? file[0].name.split('.').pop() : undefined;
     const isCsv = fileExtension === 'csv';
 
     if (isCsv) {
@@ -35,25 +35,28 @@ export function UploadFileDetail({ setItems, setUploads }: UploadFileProps) {
         setProgress(Math.round((100 * event.loaded) / event.total));
       }
     )
-      .then((i) => {
-        setItems(i);
+      .then(() => {
+        getData().then((i) => setItems(i));
+        getUploads().then((u) => setUploads(u));
+        setCurrentFile(undefined);
         setMessage(undefined);
         setIsError(false);
       })
       .catch(() => {
         setProgress(0);
-        setMessage('Could not upload the file!');
         setCurrentFile(undefined);
+        setMessage('Could not upload the file!');
         setIsError(true);
       });
-    getUploads().then((u) => setUploads(u));
   };
+
+  console.log('currentFile', currentFile);
+
 
   const styles = {
     wrapper: {},
     paper: {
       padding: 2,
-      margin: 2,
     },
     inner: {
       display: 'flex',
@@ -92,9 +95,15 @@ export function UploadFileDetail({ setItems, setUploads }: UploadFileProps) {
                 <AttachFile />
               </IconButton>
             </label>
-            <Box component='div'>
-              {currentFile ? currentFile.name : null}
-            </Box>
+            {currentFile?.name ? (
+              <Box component='div'>
+                {currentFile?.name}
+              </Box>
+            ) : (
+              <Box component='div'>
+                {''}
+              </Box>
+            )}
           </Box>
 
           <Button
@@ -109,7 +118,7 @@ export function UploadFileDetail({ setItems, setUploads }: UploadFileProps) {
         </Box>
         {currentFile && progress !== 0 && progress !== 100 && (
           <Box display='flex' alignItems='center'>
-            <Box minWidth={35}>
+            <Box>
               <Typography variant='body2' sx={styles.fileName}>
                 Loading file ...
               </Typography>
